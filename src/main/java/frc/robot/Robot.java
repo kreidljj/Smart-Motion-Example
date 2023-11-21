@@ -53,18 +53,24 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
  */
 public class Robot extends TimedRobot {
   private static final int deviceID = 13;
+  private static final MotorType kMotorType = MotorType.kBrushless;
+  private static final SparkMaxAlternateEncoder.Type kAltEncType = SparkMaxAlternateEncoder.Type.kQuadrature;
+  private static final int kCPR = 8192;
+
   private CANSparkMax m_motor;
   private SparkMaxPIDController m_pidController;
   private RelativeEncoder m_encoder;
   public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM, maxVel, minVel, maxAcc, allowedErr;
   //private SparkMaxAbsoluteEncoder m_encoder;
-  private static final SparkMaxAlternateEncoder.Type kAltEncType = SparkMaxAlternateEncoder.Type.kQuadrature;
-  private static final int kCPR = 8192;
-
+  
+  
   @Override
   public void robotInit() {
     // initialize motor
-    m_motor = new CANSparkMax(deviceID, MotorType.kBrushless);
+    m_motor = new CANSparkMax(deviceID, kMotorType);
+    m_motor.restoreFactoryDefaults();
+    m_encoder = m_motor.getAlternateEncoder(kAltEncType, kCPR);
+    
     //m_encoder = m_motor.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle);
     //m_encoder.setPositionConversionFactor(360);
     //m_encoder.setZeroOffset(67.5);
@@ -75,12 +81,12 @@ public class Robot extends TimedRobot {
      * in the SPARK MAX to their factory default state. If no argument is passed, these
      * parameters will not persist between power cycles
      */
-    m_motor.restoreFactoryDefaults();
+
 
     // initialze PID controller and encoder objects
     m_pidController = m_motor.getPIDController();
     //m_encoder = m_motor.getEncoder();
-    m_encoder = m_motor.getAlternateEncoder(kAltEncType, kCPR);
+
 
 
     // PID coefficients
@@ -194,5 +200,6 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("SetPoint", setPoint);
     SmartDashboard.putNumber("Process Variable", processVariable);
     SmartDashboard.putNumber("Output", m_motor.getAppliedOutput());
+    SmartDashboard.putNumber("Encoder Position", m_encoder.getPosition());
   }
 }
