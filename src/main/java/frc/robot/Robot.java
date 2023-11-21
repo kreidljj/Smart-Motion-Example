@@ -132,7 +132,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Min Velocity", minVel);
     SmartDashboard.putNumber("Max Acceleration", maxAcc);
     SmartDashboard.putNumber("Allowed Closed Loop Error", allowedErr);
-    SmartDashboard.putNumber("Set Position 90-190", 90);
+    SmartDashboard.putNumber("Set Position", 0);
     SmartDashboard.putNumber("Set Velocity", 0);
 
     // button to toggle between velocity and smart motion modes
@@ -176,7 +176,7 @@ public class Robot extends TimedRobot {
       m_pidController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
       processVariable = m_encoder.getVelocity();
     } else {
-      setPoint = SmartDashboard.getNumber("Set Position 90-190", 90);
+      setPoint = SmartDashboard.getNumber("Set Position", 0);
       /**
        * As with other PID modes, Smart Motion is set by calling the
        * setReference method on an existing pid object and setting
