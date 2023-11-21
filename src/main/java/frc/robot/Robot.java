@@ -128,6 +128,7 @@ public class Robot extends TimedRobot {
     m_pidController.setSmartMotionMinOutputVelocity(minVel, smartMotionSlot);
     m_pidController.setSmartMotionMaxAccel(maxAcc, smartMotionSlot);
     m_pidController.setSmartMotionAllowedClosedLoopError(allowedErr, smartMotionSlot);
+    m_pidController.setFeedbackDevice(m_encoder);
 
     // display PID coefficients on SmartDashboard
     SmartDashboard.putNumber("P Gain", kP);
