@@ -11,7 +11,8 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxAbsoluteEncoder;
+//import com.revrobotics.SparkMaxAbsoluteEncoder;
+import com.revrobotics.SparkMaxAlternateEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -54,17 +55,19 @@ public class Robot extends TimedRobot {
   private static final int deviceID = 13;
   private CANSparkMax m_motor;
   private SparkMaxPIDController m_pidController;
-  //private RelativeEncoder m_encoder;
+  private RelativeEncoder m_encoder;
   public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM, maxVel, minVel, maxAcc, allowedErr;
-  private SparkMaxAbsoluteEncoder m_encoder;
-  
+  //private SparkMaxAbsoluteEncoder m_encoder;
+  private static final SparkMaxAlternateEncoder.Type kAltEncType = SparkMaxAlternateEncoder.Type.kQuadrature;
+  private static final int kCPR = 8192;
+
   @Override
   public void robotInit() {
     // initialize motor
     m_motor = new CANSparkMax(deviceID, MotorType.kBrushless);
-    m_encoder = m_motor.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle);
-    m_encoder.setPositionConversionFactor(360);
-    m_encoder.setZeroOffset(67.5);
+    //m_encoder = m_motor.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle);
+    //m_encoder.setPositionConversionFactor(360);
+    //m_encoder.setZeroOffset(67.5);
     //m_encoder = new AlternateEncoder(m_motor);
 
     /**
@@ -77,6 +80,8 @@ public class Robot extends TimedRobot {
     // initialze PID controller and encoder objects
     m_pidController = m_motor.getPIDController();
     //m_encoder = m_motor.getEncoder();
+    m_encoder = m_motor.getAlternateEncoder(kAltEncType, kCPR);
+
 
     // PID coefficients
     kP = 5e-5; 
